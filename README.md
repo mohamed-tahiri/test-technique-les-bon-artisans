@@ -76,11 +76,13 @@ Le frontend est développé avec **ReactJS** (via **Vite** pour une configuratio
 
 Le projet est organisé de manière claire et modulable pour séparer le frontend du backend tout en facilitant le déploiement avec Docker :
 
+```text
 test-technique-les-bon-artisans/
 ├── server/ # API REST Node.js avec Express, MongoDB et fonctionnalités CRUD
 ├── frontend/ # Application ReactJS moderne avec Material UI et Redux Toolkit
 ├── docker-compose.yml # Configuration Docker pour MongoDB, Mailhog et Mongo Express
 └── README.md # Documentation complète du projet
+```
 
 ##### ✅ Points clés de l’architecture
 - **Séparation claire** : Backend et frontend isolés pour faciliter le développement et la maintenance.
