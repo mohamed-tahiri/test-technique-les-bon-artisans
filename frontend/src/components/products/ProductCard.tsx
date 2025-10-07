@@ -29,62 +29,81 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
   return (
     <Card
       onClick={handleNavigate}
-      className="transition-transform hover:scale-105 shadow-lg hover:shadow-2xl cursor-pointer"
+      className="
+        transition-transform hover:scale-[1.02] cursor-pointer 
+        shadow-md hover:shadow-xl rounded-2xl 
+        bg-white overflow-hidden 
+        flex flex-col
+        sm:max-w-xs md:max-w-sm lg:max-w-md
+      "
     >
+      {/* Image produit */}
       <CardMedia
         component="img"
-        height="180"
-        image={'https://placehold.co/300x180'}
+        image={'https://placehold.co/600x400?text=Produit'}
         alt={product.name}
+        className="w-full h-48 sm:h-56 md:h-64 object-cover"
       />
 
-      <CardContent>
-        <Stack spacing={1}>
+      {/* Contenu */}
+      <CardContent className="flex flex-col justify-between p-4 sm:p-5">
+        <Stack spacing={1.5}>
+          {/* Nom du produit */}
           <Typography
             variant="h6"
             fontWeight="bold"
+            className="text-gray-800 hover:text-orange-600 line-clamp-2"
             onClick={(e) => {
               e.stopPropagation();
               handleNavigate();
             }}
-            className="hover:text-blue-600"
           >
             {product.name}
           </Typography>
 
-          <Typography variant="body2" color="text.secondary">
+          {/* Type */}
+          <Typography variant="body2" className="text-gray-500">
             {product.type}
           </Typography>
 
-          <Divider sx={{ my: 1 }} />
+          <Divider />
 
-          <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={1}>
-            <Typography variant="body2">
-              Prix : <strong>€{product.price.toFixed(2)}</strong>
-            </Typography>
-
-            <Stack direction="row" alignItems="center" spacing={0.5}>
-              <Typography variant="body2">Note :</Typography>
+          {/* Prix, Note et Garantie */}
+          <div className="flex flex-col sm:grid-cols-3 gap-y-2 text-sm text-gray-700">
+            <span>
+              Prix : <strong className="text-gray-900">€{product.price.toFixed(2)}</strong>
+            </span>
+            <div className="flex items-center gap-1">
+              <span>Note :</span>
               <Rating value={product.rating} precision={0.5} readOnly size="small" />
-            </Stack>
-
-            <Typography variant="body2">
+            </div>
+            <span className="sm:col-span-1">
               Garantie : <strong>{product.warranty_years} ans</strong>
-            </Typography>
-          </Stack>
+            </span>
+          </div>
 
+          {/* Disponibilité */}
           <Chip
             label={product.available ? 'Disponible' : 'Indisponible'}
             color={product.available ? 'success' : 'error'}
             size="small"
-            sx={{ mt: 1 }}
+            className="mt-2 w-fit"
           />
 
-          <Stack direction="row" spacing={1} className="mt-3">
+          {/* Boutons d’action */}
+          <Stack
+            direction="row"
+            spacing={1}
+            className="mt-3 flex-wrap sm:flex-nowrap"
+          >
             <Button
               size="small"
-              variant="outlined"
-              color="primary"
+              sx={{
+                backgroundColor: '#ec5a13',
+                color: 'white',
+                '&:hover': { backgroundColor: '#ec5a13', color: 'white' },
+                flex: 1,
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 onEdit(product);
@@ -92,10 +111,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
             >
               Modifier
             </Button>
+
             <Button
               size="small"
-              variant="outlined"
-              color="error"
+              sx={{
+                backgroundColor: '#e5e7eb',
+                color: 'white',
+                flex: 1,
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete(product);

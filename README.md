@@ -65,7 +65,8 @@ Le frontend est développé avec **ReactJS** (via **Vite** pour une configuratio
 ##### Framework et Bibliothèques
 - **ReactJS** : Bibliothèque moderne pour construire des interfaces utilisateur réactives.
 - **Vite** : Outil de build ultra-rapide pour un développement fluide.
-- **Material UI (MUI v5)** : Composants UI élégants et responsives pour une expérience utilisateur professionnelle.
+- **Material UI (MUI v5)** : Composants UI élégants et responsives pour une expérience utilisateur professionnelle.  
+- **Tailwind CSS** : Framework utilitaire pour un design rapide, modulable et moderne.
 - **Axios** : Gestion des requêtes HTTP avec un code clair et maintenable.
 
 ##### Fonctionnalités avancées (Bonus)

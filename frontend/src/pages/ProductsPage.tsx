@@ -1,7 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import type { Product } from '../types/product';
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../services/productService';
-import { CircularProgress, Stack, Typography, Button, Grid, Pagination } from '@mui/material';
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from '../services/productService';
+import {
+  CircularProgress,
+  Stack,
+  Typography,
+  Button,
+  Grid,
+  Pagination,
+  Paper,
+} from '@mui/material';
 import ProductFilter from '../components/products/ProductFilter';
 import ProductGrid from '../components/products/ProductGrid';
 import ProductForm from '../components/products/ProductForm';
@@ -23,9 +36,7 @@ const ProductsPage: React.FC = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
   const [filters, setFilters] = useState<ProductFilters>({ search: '' });
-
   const [formData, setFormData] = useState<Omit<Product, '_id'>>({
     name: '',
     type: '',
@@ -34,14 +45,12 @@ const ProductsPage: React.FC = () => {
     warranty_years: 0,
     available: true,
   });
-
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-
       const queryParams = {
         page,
         limit: 10,
@@ -51,7 +60,6 @@ const ProductsPage: React.FC = () => {
         available: filters.available,
         type: filters.type,
       };
-
       const data = await getProducts(queryParams);
       setProducts(data.data);
       setTotalPages(data.totalPages);
@@ -73,7 +81,14 @@ const ProductsPage: React.FC = () => {
       setFormData({ ...product });
     } else {
       setEditingProduct(null);
-      setFormData({ name: '', type: '', price: 0, rating: 0, warranty_years: 0, available: true });
+      setFormData({
+        name: '',
+        type: '',
+        price: 0,
+        rating: 0,
+        warranty_years: 0,
+        available: true,
+      });
     }
     setOpenForm(true);
   };
@@ -84,7 +99,7 @@ const ProductsPage: React.FC = () => {
     try {
       if (editingProduct) {
         const updated = await updateProduct(editingProduct._id, formData);
-        setProducts(products.map(p => (p._id === updated._id ? updated : p)));
+        setProducts(products.map((p) => (p._id === updated._id ? updated : p)));
       } else {
         const created = await createProduct(formData);
         setProducts([...products, created]);
@@ -105,7 +120,7 @@ const ProductsPage: React.FC = () => {
     if (!productToDelete) return;
     try {
       await deleteProduct(productToDelete._id);
-      setProducts(products.filter(p => p._id !== productToDelete._id));
+      setProducts(products.filter((p) => p._id !== productToDelete._id));
     } catch (err) {
       console.error(err);
       alert('Erreur lors de la suppression');
@@ -123,40 +138,79 @@ const ProductsPage: React.FC = () => {
     );
 
   return (
-    <div className="p-4 md:p-8">
-      <Stack direction="row" justifyContent="space-between" className="mb-4">
-        <Typography variant="h4">Liste des produits</Typography>
-        <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
-          Créer un produit
-        </Button>
-      </Stack>
+    <div className="py-8 bg-gray-50 min-h-screen font-montserrat">
+      <Paper
+        elevation={0}
+        className="p-6 md:p-10 rounded-2xl border border-[#2b3441]/10 bg-white shadow-sm"
+      >
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          className="mb-6"
+        >
+          <Typography
+            className="text-[#2b3441] font-bold tracking-tight"
+          >
+            Liste des <span className='font-bold'>produits</span>
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: '#ec5a13',
+              color: 'white',
+              borderRadius: '1rem',
+              px: '1.5rem',
+              py: '.5rem',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                backgroundColor: '#d14e0f',
+              },
+            }}
+            onClick={() => handleOpenForm()}
+          >
+            + Créer un produit
+          </Button>
+        </Stack>
 
-      <Grid container spacing={4}>
-        <Grid  size={{ xs: 12, md: 3 }}>
-          <ProductFilter filters={filters} setFilters={setFilters} />
-        </Grid>
+        <Grid container spacing={4}>
+          <Grid size={{ xs:12, md:3 }}>
+            <ProductFilter filters={filters} setFilters={setFilters} />
+          </Grid>
 
-        <Grid  size={{ xs: 12, md: 9 }}>
-          {loading ? (
-            <Stack sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-              <CircularProgress />
-            </Stack>
-          ) : (
-            <>
-              <ProductGrid products={products} onEdit={handleOpenForm} onDelete={handleDeleteClick} />
-
-              <Stack alignItems="center" mt={4}>
-                <Pagination
-                  count={totalPages}
-                  page={page}
-                  onChange={(_, newPage) => setPage(newPage)}
-                  color="primary"
-                />
+          <Grid size={{ xs:12, md:9 }}>
+            {loading ? (
+              <Stack
+                sx={{
+                  height: '60vh',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <CircularProgress sx={{ color: '#ec5a13' }} />
               </Stack>
-            </>
-          )}
+            ) : (
+              <>
+                <ProductGrid
+                  products={products}
+                  onEdit={handleOpenForm}
+                  onDelete={handleDeleteClick}
+                />
+
+                <Stack alignItems="center" mt={4}>
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={(_, newPage) => setPage(newPage)}
+                  />
+                </Stack>
+              </>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
+      </Paper>
 
       <ProductForm
         open={openForm}

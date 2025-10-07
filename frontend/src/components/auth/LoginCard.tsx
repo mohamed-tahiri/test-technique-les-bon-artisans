@@ -1,5 +1,14 @@
 import * as React from 'react';
-import { Box, Button, Card as MuiCard, FormLabel, FormControl, Link, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card as MuiCard,
+  FormLabel,
+  FormControl,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -21,11 +30,12 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 export default function LoginCard() {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [form, setForm] = React.useState({ email: '', password: '' });
   const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
   const [loading, setLoading] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(''); // <-- nouveau state
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -46,8 +56,6 @@ export default function LoginCard() {
     return Object.keys(newErrors).length === 0;
   };
 
-
-  const dispatch = useDispatch<AppDispatch>();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
@@ -62,52 +70,85 @@ export default function LoginCard() {
     }
   };
 
-
   return (
-    <Card variant="outlined">
-      <Typography component="h1" variant="h4">
-        Connexion
-      </Typography>
-      <Box component="form" onSubmit={handleSubmit}>
-        <FormControl fullWidth margin="normal">
-          <FormLabel>Email</FormLabel>
-          <TextField
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            error={!!errors.email}
-            helperText={errors.email}
-            placeholder="exemple@email.com"
-          />
-        </FormControl>
-        <FormControl fullWidth margin="normal">
-          <FormLabel>Mot de passe</FormLabel>
-          <TextField
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            error={!!errors.password}
-            helperText={errors.password}
-            placeholder="••••••"
-          />
-        </FormControl>
-        {errorMessage && (
-          <Typography color="error" sx={{ mt: 1, mb: 1 }}>
-            {errorMessage}
-          </Typography>
-        )}
-        <Button type="submit" fullWidth variant="contained" disabled={loading}>
-          {loading ? 'Connexion...' : 'Se connecter'}
-        </Button>
-        <Typography sx={{ textAlign: 'center' }}>
-          Vous n'avez pas de compte ?{' '}
-          <Link href="/register" variant="body2">
-            Inscrivez-vous
-          </Link>
+    <Box
+      sx={{
+        position: 'sticky',
+        top: 0,
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        p: 4,
+        backgroundColor: '#f9fafb',
+        width: { xs: '100%', md: 400 },
+      }}
+    >
+      <Card variant="outlined">
+        <Typography component="h1" variant="h4" sx={{ textAlign: 'center', mb: 2 }}>
+          Connexion
         </Typography>
-      </Box>
-    </Card>
+        <Box component="form" onSubmit={handleSubmit}>
+          <FormControl fullWidth margin="normal">
+            <FormLabel>Email</FormLabel>
+            <TextField
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
+              placeholder="exemple@email.com"
+            />
+          </FormControl>
+          <FormControl fullWidth margin="normal">
+            <FormLabel>Mot de passe</FormLabel>
+            <TextField
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+              error={!!errors.password}
+              helperText={errors.password}
+              placeholder="••••••"
+            />
+          </FormControl>
+          {errorMessage && (
+            <Typography color="error" sx={{ mt: 1, mb: 1 }}>
+              {errorMessage}
+            </Typography>
+          )}
+
+          {/* Bouton complètement adapté */}
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: '#ec5a13',
+              color: 'white',
+              borderRadius: '1rem',
+              px: '1.5rem',
+              py: '.5rem',
+              textTransform: 'none',
+              width: '100%',
+              fontWeight: 600,
+              '&:hover': {
+                backgroundColor: '#d14e0f',
+              },
+            }}
+            disabled={loading}
+          >
+            {loading ? 'Connexion...' : 'Se connecter'}
+          </Button>
+
+          <Typography sx={{ textAlign: 'center', mt: 2 }}>
+            Vous n'avez pas de compte ?{' '}
+            <Link href="/register" variant="body2">
+              Inscrivez-vous
+            </Link>
+          </Typography>
+        </Box>
+      </Card>
+    </Box>
   );
 }

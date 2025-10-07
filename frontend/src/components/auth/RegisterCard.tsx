@@ -66,7 +66,26 @@ export default function RegisterCard() {
           <FormLabel>Mot de passe</FormLabel>
           <TextField name="password" type="password" value={form.password} onChange={handleChange} error={!!errors.password} helperText={errors.password} placeholder="••••••" />
         </FormControl>
-        <Button type="submit" fullWidth variant="contained" disabled={loading}>{loading ? "Création..." : "S'inscrire"}</Button>
+        <Button 
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: '#ec5a13',
+            color: 'white',
+            borderRadius: '1rem',
+            px: '1.5rem',
+            py: '.5rem',
+            textTransform: 'none',
+            width: '100%',
+            fontWeight: 600,
+            '&:hover': {
+              backgroundColor: '#d14e0f',
+            },
+          }}
+         disabled={loading}
+        >
+          {loading ? "Création..." : "S'inscrire"}
+        </Button>
         <Typography sx={{ textAlign: 'center' }}>
           Vous avez déjà un compte ? <Link href="/login" variant="body2">Connectez-vous</Link>
         </Typography>
